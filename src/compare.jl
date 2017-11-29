@@ -3,6 +3,9 @@ include(joinpath(Pkg.dir("TabularReinforcementLearning"),
                  "examples/mdpexamples.jl"))
 loadcomparisontools()
 
+const DATADIR = joinpath(@__DIR__, "data")
+if !isdir(DATADIR); mkdir(DATADIR); end
+
 function getbaselineperformances(env, γ, policy)
     mdpl = MDPLearner(env, γ)
     policy_iteration!(mdpl)
@@ -125,7 +128,7 @@ figure(); plotcomparison(res4b); plt[:title]("4b")
 figure(); plotcomparison(res5, labelsdict = labels); plt[:ylim]([0, 1.3]); plt[:title]("5")
 
 using JLD, DataFrames
-@save "../data/results.jld" res1 res2 res3 res4 res4b res5
+@save "$DATADIR/results.jld" res1 res2 res3 res4 res4b res5
 
 function dftocsv(filename, df; T = 1, samples = 5)
     dfo = DataFrame(); dfo[:x] = collect(1:length(df[:value][1]))*T
@@ -140,29 +143,5 @@ end
 
 Ts = [200, 200, 100, 10000, 750]
 for i in 1:5
-    dftocsv("../doc/pics/res$i.csv", eval(Symbol("res$i")), T = Ts[i])
+    dftocsv("$DATADIR/res$i.csv", eval(Symbol("res$i")), T = Ts[i])
 end
-
-# @time res1p = vcat([paramscompare(getmazemdp, 2, 100*10000,
-#                                 agent = "qllambda", αlambda = .005, γ = .99,
-#                                 params = Dict(:λ => (.1, .2, .5)))
-#                   for _ in 1:2]...);
-# figure(); plotcomparison(res1p);
-
-# env = getdettreemdp();
-# policy = EpsilonGreedyPolicy(0.1)
-# params = ((:na, env.na), (:ns, env.ns), (:γ, .99));
-# ps() = Agent(SmallBackups(; params..., initvalue = .005, maxcount = 4), policy = policy)
-# qllambda() = Agent(QLearning(; params..., λ = 1., α = 1e-3, initvalue =
-#                                1.e-6), 
-#                      policy = policy)
-# mc() = Agent(MonteCarlo(; params[1:end-1]...), policy = policy)
-# nstepql() = Agent(NstepLearner(; nsteps = 10, learner = Sarsa, 
-#                                params..., α = .1), 
-#                 policy = policy)
-# x = RLSetup(mc(), env, EvaluationPerT(100), ConstantNumberSteps(7500*100));
-# learn!(x)
-# x.agent.learner.learner.Q
-# y = RLSetup(nstepql(), env, EvaluationPerT(100), ConstantNumberSteps(7500*100));
-# learn!(y)
-# y.agent.learner.learner.params
