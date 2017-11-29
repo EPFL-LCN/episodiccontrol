@@ -1,11 +1,11 @@
-This repository contains the code for the simulations reported in the article
-[Is prioritized sweeping the better episodic control?](https://arxiv.org/abs/1711.06677)
+This repository contains the code for the simulations reported in the article:
+Brea J (2017). [Is prioritized sweeping the better episodic control?](https://arxiv.org/abs/1711.06677) arXiv:1711.06677
 
-### Dependencies
+## Dependencies
 * [Julia](https://julialang.org/downloads)
 * [TabularReinforcementLearning](https://github.com/jbrea/TabularReinforcementLearning.jl/)
 
-### Usage
+## Usage
 Run in a shell 
 
 ```shell
