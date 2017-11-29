@@ -9,6 +9,7 @@ This repository contains the code for the simulations reported in the article
 Run in a shell 
 
 ```shell
+cd src
 julia compare.jl
 ```
 
